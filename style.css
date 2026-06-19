@@ -1,0 +1,929 @@
+:root {
+  --cream: #fbf6ef;
+  --paper: rgba(255, 253, 249, 0.91);
+  --ink: #3d2930;
+  --muted: #756168;
+  --rose: #b94d6d;
+  --rose-dark: #8f2f50;
+  --rose-pale: #f4ccd7;
+  --blush: #f9e9ec;
+  --green: #6e8467;
+  --green-dark: #425a46;
+  --line: rgba(143, 47, 80, 0.15);
+  --shadow: 0 24px 70px rgba(95, 54, 65, 0.13), 0 4px 18px rgba(95, 54, 65, 0.08);
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 280px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.95) 0 25%, transparent 52%),
+    linear-gradient(145deg, #fcf8f1 0%, #fffafa 48%, #f7eee9 100%);
+  font-family: var(--sans);
+  line-height: 1.65;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: radial-gradient(rgba(143, 47, 80, 0.06) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+  content: "";
+  pointer-events: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(185, 77, 109, 0.35);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--rose-dark);
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Le variabili attraversano correttamente le istanze SVG create con <use>. */
+.peony-leaves {
+  fill: var(--leaf-fill, #789071);
+}
+
+.peony-petals {
+  fill: var(--petal-fill, #d9819a);
+}
+
+.peony-petals .petal-light {
+  fill: var(--petal-light-fill, #efb9c7);
+}
+
+.peony-petals .peony-heart {
+  fill: var(--heart-fill, #b44e6d);
+}
+
+.peony-petals .peony-glow {
+  fill: var(--glow-fill, #f8d7df);
+}
+
+.topbar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.1rem 0;
+}
+
+.mini-brand {
+  color: var(--rose-dark);
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.restart-button {
+  min-height: 42px;
+  padding: 0.55rem 0.85rem;
+  border: 0;
+  border-bottom: 1px solid rgba(143, 47, 80, 0.35);
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.restart-button:hover {
+  color: var(--rose-dark);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 5;
+  width: min(760px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0.5rem 0 4rem;
+}
+
+.progress-shell {
+  width: min(570px, 100%);
+  margin: 0 auto 1rem;
+  padding: 0 0.25rem;
+}
+
+.progress-copy {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.progress-track {
+  height: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(143, 47, 80, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 4px rgba(80, 42, 51, 0.08);
+}
+
+.progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d87e98, var(--rose), #a94667);
+  box-shadow: 0 0 12px rgba(185, 77, 109, 0.3);
+  transition: width 700ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.stage {
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.stage.is-leaving {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.game-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 30px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.game-card::before,
+.game-card::after {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border: 1px solid rgba(185, 77, 109, 0.08);
+  border-radius: 50%;
+  content: "";
+}
+
+.game-card::before {
+  top: -72px;
+  right: -45px;
+  box-shadow: 0 0 0 18px rgba(244, 204, 215, 0.12), 0 0 0 36px rgba(244, 204, 215, 0.08);
+}
+
+.game-card::after {
+  bottom: -90px;
+  left: -50px;
+  box-shadow: 0 0 0 18px rgba(110, 132, 103, 0.06), 0 0 0 36px rgba(110, 132, 103, 0.04);
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--rose);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 8vw, 4.6rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+}
+
+.title-accent {
+  display: block;
+  color: var(--rose-dark);
+  font-style: italic;
+}
+
+.intro-copy,
+.final-copy {
+  max-width: 590px;
+  margin: 1.2rem auto 1.5rem;
+  color: #5e484f;
+  font-size: clamp(0.98rem, 2.2vw, 1.08rem);
+  white-space: pre-line;
+}
+
+.centered {
+  text-align: center;
+}
+
+.riddle-box {
+  margin: 1.35rem 0;
+  padding: 1.15rem clamp(1rem, 4vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: #584047;
+  background: linear-gradient(135deg, rgba(249, 233, 236, 0.55), rgba(255, 255, 255, 0.62));
+  font-family: var(--serif);
+  font-size: clamp(1rem, 2.5vw, 1.12rem);
+  line-height: 1.66;
+  white-space: pre-line;
+}
+
+.acrostic {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border-left: 2px solid var(--rose-pale);
+  background: rgba(255, 255, 255, 0.52);
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.acrostic span {
+  display: block;
+}
+
+.acrostic b {
+  display: inline-block;
+  width: 1.15em;
+  color: var(--rose-dark);
+  font-family: var(--serif);
+  font-size: 1.08em;
+}
+
+.answer-form {
+  margin-top: 1.3rem;
+}
+
+.answer-form label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--ink);
+  font-size: 0.87rem;
+  font-weight: 750;
+}
+
+.answer-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+}
+
+.answer-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(143, 47, 80, 0.24);
+  border-radius: 15px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 1px 3px rgba(79, 45, 54, 0.04);
+}
+
+.answer-input::placeholder {
+  color: #a38d94;
+}
+
+.primary-button,
+.secondary-button,
+.hint-button {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 750;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.primary-button {
+  padding: 0.72rem 1.25rem;
+  border: 1px solid #a83f60;
+  color: #fff;
+  background: linear-gradient(135deg, #c85f7e, #9e3859);
+  box-shadow: 0 10px 22px rgba(158, 56, 89, 0.23);
+}
+
+.secondary-button {
+  padding: 0.72rem 1.25rem;
+  border: 1px solid rgba(143, 47, 80, 0.23);
+  color: var(--rose-dark);
+  background: #fffaf9;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.hint-button:hover {
+  transform: translateY(-2px);
+}
+
+.primary-button:hover {
+  box-shadow: 0 13px 27px rgba(158, 56, 89, 0.29);
+}
+
+.intro-button {
+  margin-top: 0.1rem;
+}
+
+.hint-button {
+  min-height: 42px;
+  margin-top: 0.65rem;
+  padding: 0.5rem 0.8rem;
+  border: 0;
+  color: var(--green-dark);
+  background: transparent;
+  text-decoration: underline;
+  text-decoration-color: rgba(66, 90, 70, 0.3);
+  text-underline-offset: 4px;
+}
+
+.feedback {
+  min-height: 1.6rem;
+  margin: 0.7rem 0 0;
+  color: #8a2949;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.hint-box {
+  margin-top: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  color: var(--green-dark);
+  background: rgba(226, 235, 220, 0.65);
+  font-size: 0.9rem;
+}
+
+.photo-frame {
+  position: relative;
+  width: min(460px, 100%);
+  margin: 1.55rem auto;
+  padding: 7px;
+  border: 1px solid rgba(143, 47, 80, 0.18);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 16px 34px rgba(80, 49, 57, 0.13);
+}
+
+.photo-frame::before,
+.photo-frame::after {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: radial-gradient(circle at 40% 35%, #f9dce4 0 15%, #d47691 16% 45%, #ae4567 46% 65%, #7d314a 66%);
+  box-shadow: 0 4px 10px rgba(86, 47, 58, 0.2);
+  content: "";
+}
+
+.photo-frame::before {
+  top: -13px;
+  left: -11px;
+}
+
+.photo-frame::after {
+  right: -10px;
+  bottom: -12px;
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle at 40% 35%, #fff 0 15%, #f9edf0 16% 45%, #e8c6d0 46% 65%, #b999a4 66%);
+}
+
+.photo-frame img,
+.photo-fallback {
+  display: block;
+  width: 100%;
+  height: clamp(315px, 60vh, 500px);
+  border-radius: 19px;
+}
+
+.photo-frame img {
+  object-fit: cover;
+  object-position: var(--photo-position, center);
+}
+
+.photo-fallback {
+  display: none;
+  place-items: center;
+  padding: 2rem;
+  color: var(--rose-dark);
+  background:
+    radial-gradient(circle at 20% 20%, #f4ccd7 0 4%, transparent 4.3%),
+    radial-gradient(circle at 80% 75%, #f4ccd7 0 6%, transparent 6.3%),
+    linear-gradient(145deg, #fffafa, #f8e9ec);
+  font-family: var(--serif);
+  text-align: center;
+}
+
+.photo-frame.is-missing img {
+  display: none;
+}
+
+.photo-frame.is-missing .photo-fallback {
+  display: grid;
+}
+
+.photo-caption {
+  margin: -0.8rem 0 1.2rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.success-mark {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 1rem;
+  place-items: center;
+  border: 1px solid rgba(143, 47, 80, 0.16);
+  border-radius: 50%;
+  color: var(--rose-dark);
+  background: var(--blush);
+  font-family: var(--serif);
+  font-size: 2rem;
+  animation: bloom-in 700ms cubic-bezier(0.17, 0.84, 0.35, 1.3) both;
+}
+
+.success-copy {
+  margin: 1rem auto;
+  color: #584047;
+  white-space: pre-line;
+}
+
+.final-card {
+  padding-top: clamp(1.8rem, 6vw, 3.5rem);
+}
+
+.final-copy strong {
+  color: var(--rose-dark);
+  font-weight: 800;
+}
+
+.final-wish {
+  display: block;
+  margin-top: 1rem;
+  color: var(--rose-dark);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.peony-garden {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  align-items: end;
+  width: min(620px, 108%);
+  margin: 1.5rem -4% 0;
+}
+
+.garden-peony {
+  --leaf-fill: #789071;
+  --petal-fill: #cf718d;
+  --petal-light-fill: #e9a8ba;
+  --heart-fill: #a74162;
+  --glow-fill: #f8d5de;
+  width: 145%;
+  margin-left: -22%;
+  overflow: visible;
+  filter: drop-shadow(0 3px 3px rgba(83, 42, 54, 0.12));
+  opacity: 0;
+  transform: scale(0.15) rotate(var(--rotate));
+  transform-origin: 50% 75%;
+  animation: garden-bloom 850ms cubic-bezier(0.2, 0.8, 0.2, 1.2) forwards;
+  animation-delay: var(--delay);
+}
+
+.garden-peony:nth-child(3n) {
+  --petal-fill: #f4e3e8;
+  --petal-light-fill: #fffafa;
+}
+
+.garden-peony:nth-child(even) {
+  margin-bottom: -13%;
+}
+
+.garden-peony .peony-petals {
+  fill: #cf718d;
+}
+
+.garden-peony:nth-child(3n) .peony-petals {
+  fill: #f4e3e8;
+}
+
+.garden-peony .petal-light {
+  fill: #e9a8ba;
+}
+
+.garden-peony:nth-child(3n) .petal-light {
+  fill: #fffafa;
+}
+
+.garden-peony .peony-heart {
+  fill: #a74162;
+}
+
+.garden-peony .peony-glow {
+  fill: #f8d5de;
+}
+
+.garden-peony .peony-leaves {
+  fill: #789071;
+}
+
+.botanical {
+  position: fixed;
+  inset-block: 0;
+  z-index: 1;
+  width: clamp(110px, 18vw, 260px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.botanical--left {
+  left: 0;
+}
+
+.botanical--right {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.edge-flower {
+  --leaf-fill: #789071;
+  --petal-fill: #d9819a;
+  --petal-light-fill: #efb9c7;
+  --heart-fill: #b44e6d;
+  --glow-fill: #f8d7df;
+  position: absolute;
+  width: clamp(115px, 15vw, 210px);
+  overflow: visible;
+  filter: drop-shadow(0 7px 8px rgba(81, 46, 55, 0.08));
+}
+
+.edge-flower--one {
+  top: 8%;
+  left: -35%;
+  transform: rotate(15deg);
+}
+
+.edge-flower--two {
+  top: 43%;
+  left: -48%;
+  transform: rotate(-17deg) scale(0.78);
+}
+
+.edge-flower--three {
+  bottom: -1%;
+  left: -25%;
+  transform: rotate(28deg) scale(1.12);
+}
+
+.edge-flower .peony-petals {
+  fill: #d9819a;
+}
+
+.edge-flower .petal-light {
+  fill: #efb9c7;
+}
+
+.edge-flower .peony-heart {
+  fill: #b44e6d;
+}
+
+.edge-flower .peony-glow {
+  fill: #f8d7df;
+}
+
+.edge-flower.white .peony-petals {
+  fill: #eee0e4;
+}
+
+.edge-flower.white .petal-light {
+  fill: #fffaf9;
+}
+
+.edge-flower.white {
+  --petal-fill: #eee0e4;
+  --petal-light-fill: #fffaf9;
+  --heart-fill: #d6b4be;
+}
+
+.edge-flower .peony-leaves {
+  fill: #789071;
+}
+
+.stem {
+  position: absolute;
+  left: 20px;
+  width: 190px;
+  height: 45vh;
+  border-left: 3px solid rgba(92, 119, 87, 0.28);
+  border-radius: 50%;
+  transform: rotate(-17deg);
+}
+
+.stem--one {
+  top: 18%;
+}
+
+.stem--two {
+  top: 57%;
+  transform: rotate(12deg);
+}
+
+.petal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.falling-petal {
+  position: absolute;
+  top: -35px;
+  left: var(--left);
+  width: var(--size);
+  height: calc(var(--size) * 0.65);
+  border-radius: 80% 15% 70% 25%;
+  background: linear-gradient(135deg, #f6c8d4, #d77994);
+  opacity: 0;
+  animation: petal-fall var(--duration) ease-in var(--delay) forwards;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  padding: 1rem;
+  place-items: center;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(53, 33, 39, 0.48);
+  backdrop-filter: blur(5px);
+  animation: fade-in 220ms ease both;
+}
+
+.modal__card {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 100%);
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 26px;
+  background: #fffaf8;
+  box-shadow: 0 30px 90px rgba(39, 20, 28, 0.3);
+  text-align: center;
+  animation: modal-in 420ms cubic-bezier(0.18, 0.85, 0.25, 1.15) both;
+}
+
+.modal__card h2 {
+  font-size: clamp(1.8rem, 7vw, 2.5rem);
+}
+
+.modal__card p {
+  color: #644d54;
+}
+
+.modal__punchline {
+  color: var(--rose-dark) !important;
+  font-weight: 800;
+}
+
+.modal__close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.7rem;
+}
+
+.modal__flower svg {
+  --leaf-fill: #789071;
+  --petal-fill: #d87995;
+  --petal-light-fill: #f0b7c7;
+  --heart-fill: #a84161;
+  --glow-fill: #f8d8df;
+  width: 76px;
+  overflow: visible;
+}
+
+.modal__flower .peony-petals {
+  fill: #d87995;
+}
+
+.modal__flower .petal-light {
+  fill: #f0b7c7;
+}
+
+.modal__flower .peony-heart {
+  fill: #a84161;
+}
+
+.modal__flower .peony-glow {
+  fill: #f8d8df;
+}
+
+.modal__flower .peony-leaves {
+  fill: #789071;
+}
+
+@keyframes bloom-in {
+  from { opacity: 0; transform: scale(0.2) rotate(-30deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes garden-bloom {
+  0% { opacity: 0; transform: scale(0.15) rotate(var(--rotate)); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1) rotate(var(--rotate)); }
+}
+
+@keyframes petal-fall {
+  0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0); }
+  10% { opacity: 0.85; }
+  100% { opacity: 0.1; transform: translate3d(var(--drift), 105vh, 0) rotate(var(--spin)); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.93); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .botanical {
+    opacity: 0.46;
+  }
+
+  .botanical--left {
+    left: -32px;
+  }
+
+  .botanical--right {
+    right: -32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar,
+  .app-shell {
+    width: min(100% - 1.15rem, 760px);
+  }
+
+  .topbar {
+    padding: 0.75rem 0;
+  }
+
+  .mini-brand {
+    font-size: 0.9rem;
+  }
+
+  .restart-button {
+    padding-inline: 0.45rem;
+    font-size: 0.72rem;
+  }
+
+  .game-card {
+    border-radius: 23px;
+  }
+
+  .answer-row {
+    grid-template-columns: 1fr;
+  }
+
+  .answer-row .primary-button {
+    width: 100%;
+  }
+
+  .photo-frame img,
+  .photo-fallback {
+    height: min(52vh, 430px);
+  }
+
+  .peony-garden {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .garden-peony {
+    width: 125%;
+    margin-left: -12%;
+  }
+
+  .botanical {
+    width: 90px;
+    opacity: 0.3;
+  }
+
+  .edge-flower--two {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .falling-petal {
+    display: none;
+  }
+}
